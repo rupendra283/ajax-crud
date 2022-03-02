@@ -116,9 +116,12 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee)
+    public function edit(Request $request)
     {
-        //
+
+        $employee = Employee::find($request->id);
+        return response()->json($employee);
+
     }
 
     /**
@@ -130,7 +133,8 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        //
+        // dd($request->all());
+
     }
 
     /**
