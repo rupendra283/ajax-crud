@@ -251,6 +251,7 @@ $("#edit_employee_form").submit(function(e){
 e.preventDefault();
 
 const fd = new FormData(this)
+console.log(fd   );
 $("#edit_employee_btn").text("Adding...")
 $.ajax({
   url: '{{ route('employee.update') }}',
@@ -272,9 +273,10 @@ $.ajax({
       }
       $('#edit_employee_btn').text('Update Employee');
       $('#edit_employee_form')[0].reset();
-      $('#addEmployeeModal').modal('hide');
+      $('#editEmployeeModal').modal('hide');
       FetchEmployee();
-      console.log(res);
+
+
   }
 });
 });
@@ -282,6 +284,42 @@ $.ajax({
 
 
 
+// delete employee
+// delete employee ajax request
+$(document).on('click', '.deleteIcon', function(e) {
+        e.preventDefault();
+        let id = $(this).attr('id');
+        let csrf = '{{ csrf_token() }}';
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '{{ route('employee.delete') }}',
+              method: 'get',
+              data: {
+                id: id,
+                _token: csrf
+              },
+              success: function(response) {
+                console.log(response);
+                Swal.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                )
+                FetchEmployee();
+              }
+            });
+          }
+        })
+      });
 
 
 

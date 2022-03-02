@@ -133,7 +133,50 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        // dd($request->all());
+        if ($request->has('avatar')) {
+            $file =  $request->file('avatar');
+            $fileName = time() . '.' . $file->getClientOriginalName();
+            $file->move(public_path('image/'),$fileName);
+
+            $emp = Employee::find($request->emp_id);
+
+            $emp->first_name = $request->fname;
+            $emp->last_name = $request->lname;
+            $emp->email = $request->email;
+            $emp->phone = $request->phone;
+            $emp->post = $request->post;
+            $emp->avatar = $fileName;
+            $emp->save();
+
+            return response()->json([
+                'status' => 200,
+
+            ]);
+
+
+            # code...
+        } else {
+
+            $emp = Employee::find($request->emp_id);
+
+            $emp->first_name = $request->fname;
+            $emp->last_name = $request->lname;
+            $emp->email = $request->email;
+            $emp->phone = $request->phone;
+            $emp->post = $request->post;
+            $emp->save();
+            return response()->json([
+                'status' => 200,
+
+            ]);
+
+        }
+
+
+
+
+
+
 
     }
 
@@ -143,8 +186,16 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee ,Request $request)
     {
-        //
+
+        $employee = Employee::find($request->id);
+        $employee->delete();
+        return response()->json([
+            'status' => 200,
+
+        ]);
+
+
     }
 }
